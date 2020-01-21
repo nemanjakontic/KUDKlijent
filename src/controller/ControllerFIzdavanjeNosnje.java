@@ -10,6 +10,7 @@ import domain.Clan;
 import domain.IzmeneOtpremnice;
 import domain.Nosnja;
 import domain.Otpremnica;
+import domain.StavkaOtpremnice;
 import domain.enumeracije.FormMode;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,14 +68,14 @@ class ControllerFIzdavanjeNosnje {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    public void obrisiOtpremnicu(Long sifra) throws Exception {
-        RequestObject requestObject = new RequestObject(Operation.OBRISI_OTPREMNICU, sifra);
+    public void obrisiOtpremnicu(Otpremnica otpremnica) throws Exception {
+        RequestObject requestObject = new RequestObject(Operation.OBRISI_OTPREMNICU, otpremnica);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
         ResponseObject responseObject = CommunicationServer.getInstance().receiveResponse();
         if (responseObject.getStatus().equals(ResponseStatus.SUCCESS)) {
-            
+            return;
         }
         throw new Exception(responseObject.getErrorMessage());
 
@@ -275,9 +276,9 @@ class ControllerFIzdavanjeNosnje {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Otpremnica otpremnica = (Otpremnica) getMap().get("trenutnaOtpremnica");
-                Long sifra = otpremnica.getSifraOtpremnice();
+                //Long sifra = otpremnica.getSifraOtpremnice();
                 try {
-                    obrisiOtpremnicu(sifra);
+                    obrisiOtpremnicu(otpremnica);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
                 }

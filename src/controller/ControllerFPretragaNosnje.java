@@ -56,29 +56,29 @@ public class ControllerFPretragaNosnje {
         fPretragaNosnje.getjTblNosnja().setModel(new NosnjaTableModel(lista));
     }
 
-    public Nosnja vratiNosnju(int sifraNosnje) throws Exception {
+    public Nosnja vratiNosnju(Nosnja nosnja) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_JEDNU_NOSNJU);
-        requestObject.setData(sifraNosnje);
+        requestObject.setData(nosnja);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
         ResponseObject responseObject = CommunicationServer.getInstance().receiveResponse();
         if (responseObject.getStatus().equals(ResponseStatus.SUCCESS)) {
-            Nosnja nosnja = (Nosnja) responseObject.getData();
-            return nosnja;
+            Nosnja nosnja1 = (Nosnja) responseObject.getData();
+            return nosnja1;
         }
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    public List<Nosnja> vratiNosnjePoKriterijumu(String kriterijumPretrage, String naziv, String vrsta) throws Exception{
+    public List<Nosnja> vratiNosnjePoKriterijumu(Nosnja nosnja) throws Exception{
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_NOSNJE_PO_KRITERIJUMU);
-        Map<String, String> nosnjaMap = new HashMap<>();
+        /*Map<String, String> nosnjaMap = new HashMap<>();
         nosnjaMap.put("sifraNosnje", kriterijumPretrage);
         nosnjaMap.put("naziv", naziv);
-        nosnjaMap.put("vrsta", vrsta);
-        requestObject.setData(nosnjaMap);
+        nosnjaMap.put("vrsta", vrsta);*/
+        requestObject.setData(nosnja);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
@@ -114,10 +114,13 @@ public class ControllerFPretragaNosnje {
                 if (selectedRow == -1) {
                     JOptionPane.showMessageDialog(fPretragaNosnje, "Molimo vas selektujte clana");
                 } else {
-                    int sifraNosnje = (int) fPretragaNosnje.getjTblNosnja().getValueAt(selectedRow, 0);
+                    Long sifraNosnje = (Long) fPretragaNosnje.getjTblNosnja().getValueAt(selectedRow, 0);
+                    Nosnja nosnjica = new Nosnja();
+                    nosnjica.setSifraNosnje(sifraNosnje);
+                    
                     Nosnja nosnja = null;
                     try {
-                        nosnja = vratiNosnju(sifraNosnje);
+                        nosnja = vratiNosnju(nosnjica);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -163,9 +166,17 @@ public class ControllerFPretragaNosnje {
                     String naziv = fPretragaNosnje.getJtxtNaziv().getText();
                     String vrsta = String.valueOf(fPretragaNosnje.getJcmbVrsta().getSelectedItem());
                     
+                    Nosnja nosnja = new Nosnja();
+                    if(!kriterijumPretrage.equals("")){
+                        Long sifra = Long.parseLong(kriterijumPretrage);
+                        nosnja.setSifraNosnje(sifra);
+                    }
+                    nosnja.setNazivNosnje(naziv);
+                    nosnja.setVrstaNosnje(VrstaNosnje.valueOf(vrsta));
+                    
                     List<Nosnja> nosnje = null;
                     try {
-                        nosnje = vratiNosnjePoKriterijumu(kriterijumPretrage, naziv, vrsta);
+                        nosnje = vratiNosnjePoKriterijumu(nosnja);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
                     }

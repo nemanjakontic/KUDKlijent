@@ -59,13 +59,13 @@ public class ControllerFPretragaOtpremnica {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    private List<Otpremnica> vratiOtpremnicePoKriterijumu(String sifra, String clan) throws Exception{
+    private List<Otpremnica> vratiOtpremnicePoKriterijumu(Otpremnica otpremnica) throws Exception{
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_OTPREMNICE_PO_KRITERIJUMU);
-        Map<String, String> otpremnicaMap = new HashMap<>();
+        /*Map<String, String> otpremnicaMap = new HashMap<>();
         otpremnicaMap.put("sifra", sifra);
-        otpremnicaMap.put("clan", clan);
-        requestObject.setData(otpremnicaMap);
+        otpremnicaMap.put("clan", clan);*/
+        requestObject.setData(otpremnica);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
@@ -78,10 +78,10 @@ public class ControllerFPretragaOtpremnica {
         throw new Exception(responseObject.getErrorMessage());
     }
     
-    private Otpremnica vratiOtpremnicu(Long sifraOtpremnice) throws Exception {
+    private Otpremnica vratiOtpremnicu(Otpremnica otpremnica) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_JEDNU_OTPREMNICE);
-        requestObject.setData(sifraOtpremnice);
+        requestObject.setData(otpremnica);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
@@ -108,14 +108,20 @@ public class ControllerFPretragaOtpremnica {
                     JOptionPane.showMessageDialog(fPretragaOtpremnica, "Molimo vas selektujte clana");
                 } else {
                     Long sifraOtpremnice = (Long) fPretragaOtpremnica.getjTable1().getValueAt(selectedRow, 0);
+                    Otpremnica otp = new Otpremnica();
+                    otp.setSifraOtpremnice(sifraOtpremnice);
                     Otpremnica otpremnica = null;
                     try {
-                        otpremnica = vratiOtpremnicu(sifraOtpremnice);
+                        otpremnica = vratiOtpremnicu(otp);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     GUICoordinator.getInstance().pozoviPostavljanjeOtpremnice(otpremnica);
-                    GUICoordinator.getInstance().otvoriIzdavanjeNosnje(null, FormMode.FORM_VIEW);
+                    try {
+                        GUICoordinator.getInstance().otvoriIzdavanjeNosnje(null, FormMode.FORM_VIEW);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                     OtpremniceTableModel otm = (OtpremniceTableModel) fPretragaOtpremnica.getjTable1().getModel();
                     List<Otpremnica> lista = null;
@@ -145,10 +151,26 @@ public class ControllerFPretragaOtpremnica {
                 } else {
                     String sifra = fPretragaOtpremnica.getJtxtSifra().getText();
                     String clan = String.valueOf(fPretragaOtpremnica.getJcmbClan().getSelectedItem());
+                    //
+                    Clan clan1 = null;
+                    if(!clan.equals("Izaberite clana")){
+                         clan1 = (Clan) fPretragaOtpremnica.getJcmbClan().getSelectedItem();
+                    }
+                    
+                    Otpremnica otpremnica = new Otpremnica();
+                    
+                    if(!sifra.equals("")){
+                        Long sifra1 = Long.parseLong(sifra);
+                        otpremnica.setSifraOtpremnice(sifra1);
+                    }
+                    //mozda da ide provera da li je equals Izaberite clana
+                    if(clan != null){
+                        otpremnica.setClan(clan1);
+                    }
                     
                     List<Otpremnica> listaOtp = null;
                     try {
-                        listaOtp = vratiOtpremnicePoKriterijumu(sifra, clan);
+                        listaOtp = vratiOtpremnicePoKriterijumu(otpremnica);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }

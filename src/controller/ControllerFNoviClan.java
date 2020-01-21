@@ -71,14 +71,14 @@ public class ControllerFNoviClan {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    public void obrisiClana(Long brojCK) throws Exception {
-        RequestObject requestObject = new RequestObject(Operation.OBRISI_CLANA, brojCK);
+    public void obrisiClana(Clan clan) throws Exception {
+        RequestObject requestObject = new RequestObject(Operation.OBRISI_CLANA, clan);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
         ResponseObject responseObject = CommunicationServer.getInstance().receiveResponse();
         if (responseObject.getStatus().equals(ResponseStatus.SUCCESS)) {
-            
+            return;
         }
         throw new Exception(responseObject.getErrorMessage());
 
@@ -155,9 +155,9 @@ public class ControllerFNoviClan {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Clan clan = (Clan) getMap().get("trenutniClan");
-                Long brojCK = clan.getBrojCK();
+                //Long brojCK = clan.getBrojCK();
                 try {
-                    obrisiClana(brojCK);
+                    obrisiClana(clan);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -201,11 +201,24 @@ public class ControllerFNoviClan {
                 Date datumRodjenja = vratiDatum(fNoviClan.getjComboBoxDan(), fNoviClan.getjComboBoxMesec(), fNoviClan.getjComboBoxGodina());
                 Date datumUclanjenja = vratiDatum(fNoviClan.getjComboBoxDan1(), fNoviClan.getjComboBoxMesec1(), fNoviClan.getjComboBoxGodina1());
 
-                if (ime.isEmpty() || prezime.isEmpty()) {
+                /*if (ime.isEmpty() || prezime.isEmpty()) {
                     JOptionPane.showMessageDialog(fNoviClan, "Polja ime i prezime moraju biti popunjena!");
+                    return;
+                }*/
+
+                fNoviClan.getJlaberrorIme().setText("");
+                fNoviClan.getJlabErrorPrezime().setText("");
+
+                if (ime.isEmpty()) {
+                    fNoviClan.getJlaberrorIme().setText("Ime ne moze biti prazno!");
                     return;
                 }
 
+                if (prezime.isEmpty()) {
+                    fNoviClan.getJlabErrorPrezime().setText("Prezime ne moze biti prazno!");
+                    return;
+                }
+                
                 Clan clan = new Clan(brojCK, ime, prezime, pol, visina, datumRodjenja, datumUclanjenja, brojObuce, ansambl, aktivan);
                 try {
                     clan = izmeniClana(clan);

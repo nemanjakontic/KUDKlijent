@@ -55,10 +55,10 @@ public class ControllerFPretragaClana {
         
     }
 
-    public Clan vratiClana(Long brojCK) throws Exception {
+    public Clan vratiClana(Clan clan) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_JEDNOG_CLANA);
-        requestObject.setData(brojCK);
+        requestObject.setData(clan);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
@@ -71,14 +71,14 @@ public class ControllerFPretragaClana {
 
     }
 
-    public List<Clan> vratiClanovePoKriterijumu(String sifra, String ime, String prezime) throws Exception {
+    public List<Clan> vratiClanovePoKriterijumu(Clan clan) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_CLANOVE_PO_KRITERIJUMU);
-        Map<String, String> clanMap = new HashMap<>();
+        /*Map<String, String> clanMap = new HashMap<>();
         clanMap.put("sifra", sifra);
         clanMap.put("ime", ime);
-        clanMap.put("prezime", prezime);
-        requestObject.setData(clanMap);
+        clanMap.put("prezime", prezime);*/
+        requestObject.setData(clan);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
@@ -107,9 +107,11 @@ public class ControllerFPretragaClana {
                     JOptionPane.showMessageDialog(fPretragaClana, "Molimo vas selektujte clana");
                 } else {
                     Long brojCK = (Long) fPretragaClana.getjTblClanovi().getValueAt(selectedRow, 0);
+                    Clan clanic = new Clan();
+                    clanic.setBrojCK(brojCK);
                     Clan clan = null;
                     try {
-                        clan = vratiClana(brojCK);
+                        clan = vratiClana(clanic);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -148,9 +150,18 @@ public class ControllerFPretragaClana {
                     String ime = fPretragaClana.getJtxtIme().getText();
                     String prezime = fPretragaClana.getJtxtPrezime().getText();
                     
+                    Clan clan = new Clan();
+                    if(!kriterijumPretrage.equals("")){
+                        Long sifra = Long.parseLong(kriterijumPretrage);
+                        clan.setBrojCK(sifra);
+                    }
+                    
+                    clan.setIme(ime);
+                    clan.setPrezime(prezime);
+                    
                     List<Clan> clanoviPoKriterijumu = null;
                     try {
-                        clanoviPoKriterijumu = vratiClanovePoKriterijumu(kriterijumPretrage, ime, prezime);
+                        clanoviPoKriterijumu = vratiClanovePoKriterijumu(clan);
                     } catch (Exception ex) {
                         Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
                     }

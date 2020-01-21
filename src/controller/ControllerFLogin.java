@@ -6,11 +6,13 @@
 package controller;
 
 import communication.CommunicationServer;
+import domain.User;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import transfer.RequestObject;
 import transfer.ResponseObject;
@@ -44,7 +46,9 @@ public class ControllerFLogin {
                 try {
                     validate(fLogin.getjTxtUsername(), fLogin.getjTxtPassword());
                     CommunicationServer.getInstance().connect();
-                    login(fLogin.getjTxtUsername().getText().trim(), String.valueOf(fLogin.getjTxtPassword().getPassword()));
+                    User user = new User();
+                    user.setUsername(fLogin.getjTxtUsername().getText().trim());
+                    login(user/*fLogin.getjTxtUsername().getText().trim(), String.valueOf(fLogin.getjTxtPassword().getPassword())*/);
                     GUICoordinator.getInstance().otvoriMainFormu();
                     fLogin.dispose();
                     System.out.println("otvaranje main forme");
@@ -82,14 +86,14 @@ public class ControllerFLogin {
         }
     }
     
-    public void login(String username, String password) throws IOException, ClassNotFoundException, Exception {
+    public void login(User user) throws IOException, ClassNotFoundException, Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.LOGIN);
         
-        Map<String, String> userMap = new HashMap<>();
+        /*Map<String, String> userMap = new HashMap<>();
         userMap.put("username", username);
-        userMap.put("password", password);
-        requestObject.setData(userMap);
+        userMap.put("password", password);*/
+        requestObject.setData(user);
         
         CommunicationServer.getInstance().sendRequest(requestObject);
         
@@ -99,6 +103,7 @@ public class ControllerFLogin {
         if(responseStatus == ResponseStatus.SUCCESS){
             map.put("user", responseObject.getData());
         }else{
+            JOptionPane.showMessageDialog(fLogin, "Username ili password nisu ispravni!");
             throw new Exception(responseObject.getErrorMessage());
         }
         

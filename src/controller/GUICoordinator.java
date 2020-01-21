@@ -10,17 +10,8 @@ import domain.Nosnja;
 import domain.Otpremnica;
 import domain.enumeracije.FormMode;
 import domain.enumeracije.FormModeVrstaNosnje;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ui.form.FDodajNosnju;
-import ui.form.FIzdavanjeNosnje;
-import ui.form.FLogin;
 import ui.form.FMain;
-import ui.form.FNoviClan;
-import ui.form.FPretragaClana;
-import ui.form.FPretragaNosnje;
 
 /**
  *
@@ -106,7 +97,7 @@ public class GUICoordinator {
         controllerFPretragaNosnje.otvoriFormuZaPretraguNosnje(fMain);
     }
 
-    public void otvoriIzdavanjeNosnje(FMain fMain, FormMode formMode) {
+    public void otvoriIzdavanjeNosnje(FMain fMain, FormMode formMode) throws Exception {
         if (controllerFIzdavanjeNosnje == null) {
             controllerFIzdavanjeNosnje = new ControllerFIzdavanjeNosnje();
         }
@@ -135,7 +126,7 @@ public class GUICoordinator {
         return controllerFPretragaNosnje.vratiListuNosnje();
     }
 
-    void otvoriPretraguOtpremnica(FMain fMain) {
+    void otvoriPretraguOtpremnica(FMain fMain) throws Exception {
         if (controllerFPretragaOtpremnica == null) {
             controllerFPretragaOtpremnica = new ControllerFPretragaOtpremnica();
         }

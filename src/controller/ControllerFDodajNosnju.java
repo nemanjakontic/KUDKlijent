@@ -6,28 +6,22 @@
 package controller;
 
 import communication.CommunicationServer;
-import domain.Clan;
 import domain.Nosnja;
 import domain.enumeracije.FormMode;
 import domain.enumeracije.FormModeVrstaNosnje;
 import domain.enumeracije.Pol;
 import domain.enumeracije.VrstaNosnje;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import transfer.RequestObject;
 import transfer.ResponseObject;
-/*import service.ServiceNosnja;
-import service.impl.ServiceNosnjaImpl;*/
 import ui.form.FDodajNosnju;
 import ui.form.FMain;
 import util.Operation;
@@ -86,14 +80,14 @@ public class ControllerFDodajNosnju {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    public void obrisiNosnju(int sifra) throws Exception {
-        RequestObject requestObject = new RequestObject(Operation.OBRISI_NOSNJU, sifra);
+    public void obrisiNosnju(Nosnja nosnja) throws Exception {
+        RequestObject requestObject = new RequestObject(Operation.OBRISI_NOSNJU, nosnja);
 
         CommunicationServer.getInstance().sendRequest(requestObject);
 
         ResponseObject responseObject = CommunicationServer.getInstance().receiveResponse();
         if (responseObject.getStatus().equals(ResponseStatus.SUCCESS)) {
-            
+            return;
         }
         throw new Exception(responseObject.getErrorMessage());
     }
@@ -165,7 +159,7 @@ public class ControllerFDodajNosnju {
                     return;
                 }
 
-                Nosnja n = new Nosnja(-1, vrstaNosnje, pol, nazivNosnje, kolicina, opis, vrstaBeline, String.valueOf(velicina), vrstaOpanaka);
+                Nosnja n = new Nosnja(null, vrstaNosnje, pol, nazivNosnje, kolicina, opis, vrstaBeline, String.valueOf(velicina), vrstaOpanaka);
 
                 try {
                     n = sacuvajNosnju(n);
@@ -184,13 +178,13 @@ public class ControllerFDodajNosnju {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Nosnja n = (Nosnja) getMap().get("trenutnaNosnja");
-                int sifra = n.getSifraNosnje();
+                //Long sifra = n.getSifraNosnje();
                 try {
-                    obrisiNosnju(sifra);
+                    obrisiNosnju(n);
                 } catch (Exception ex) {
                     Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                JOptionPane.showMessageDialog(fDodajNosnju, "Obrisan je opanak sa sifrom: " + n.getSifraNosnje());
+                JOptionPane.showMessageDialog(fDodajNosnju, "Obrisana je nosnja sa sifrom: " + n.getSifraNosnje());
 
                 isprazniFormu();
 
@@ -211,7 +205,7 @@ public class ControllerFDodajNosnju {
         fDodajNosnju.addButtonUpdateListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int sifra = Integer.parseInt(fDodajNosnju.getjTxtSifraNosnje().getText());
+                Long sifra = Long.parseLong(fDodajNosnju.getjTxtSifraNosnje().getText());
                 VrstaNosnje vrstaNosnje = (VrstaNosnje) fDodajNosnju.getjComboBoxVrstaNosnje().getSelectedItem();
                 Pol pol = (Pol) fDodajNosnju.getjComboBoxPol().getSelectedItem();
                 String nazivNosnje = fDodajNosnju.getjTxtNazivNosnje().getText();
