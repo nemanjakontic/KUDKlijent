@@ -34,9 +34,8 @@ public class ControllerFPretragaClana {
 
     private FPretragaClana fPretragaClana;
 
-
     public ControllerFPretragaClana() {
-       
+
     }
 
     public List<Clan> vratiListuClanova() throws Exception {
@@ -52,7 +51,7 @@ public class ControllerFPretragaClana {
             return clanovi;
         }
         throw new Exception(responseObject.getErrorMessage());
-        
+
     }
 
     public Clan vratiClana(Clan clan) throws Exception {
@@ -113,7 +112,9 @@ public class ControllerFPretragaClana {
                     try {
                         clan = vratiClana(clanic);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaClana, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     GUICoordinator.getInstance().inicijalizujKonstruktorKontroleraNoviClan();
                     GUICoordinator.getInstance().pozoviPostavljanjeClana(clan);
@@ -149,23 +150,25 @@ public class ControllerFPretragaClana {
                     String kriterijumPretrage = fPretragaClana.getjTxtPretraga().getText();
                     String ime = fPretragaClana.getJtxtIme().getText();
                     String prezime = fPretragaClana.getJtxtPrezime().getText();
-                    
+
                     Clan clan = new Clan();
-                    if(!kriterijumPretrage.equals("")){
+                    if (!kriterijumPretrage.equals("")) {
                         Long sifra = Long.parseLong(kriterijumPretrage);
                         clan.setBrojCK(sifra);
                     }
-                    
+
                     clan.setIme(ime);
                     clan.setPrezime(prezime);
-                    
+
                     List<Clan> clanoviPoKriterijumu = null;
                     try {
                         clanoviPoKriterijumu = vratiClanovePoKriterijumu(clan);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaClana, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     ClanTableModel ctm = new ClanTableModel(clanoviPoKriterijumu);
                     fPretragaClana.getjTblClanovi().setModel(ctm);
                 }
@@ -179,7 +182,9 @@ public class ControllerFPretragaClana {
         try {
             clanovi = vratiListuClanova();
         } catch (Exception ex) {
-            Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(fPretragaClana, "Dogodila se greska u komunikaciji!(server je ugasen)");
+            System.exit(0);
+            //Logger.getLogger(ControllerFPretragaClana.class.getName()).log(Level.SEVERE, null, ex);
         }
         fPretragaClana.getjTblClanovi().setModel(new ClanTableModel(clanovi));
     }

@@ -9,6 +9,8 @@ import domain.enumeracije.FormMode;
 import domain.enumeracije.FormModeVrstaNosnje;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ui.form.FMain;
 
 /**
@@ -20,6 +22,7 @@ public class ControllerFMain {
     private FMain fMain;
     
     public ControllerFMain() {
+        //new NitOsluskivac(fMain).start();
     }
 
     void otvoriFormuFMain() {
@@ -65,7 +68,11 @@ public class ControllerFMain {
         fMain.addButtonIzdavanjeNosnjeListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUICoordinator.getInstance().otvoriIzdavanjeNosnje(fMain, FormMode.FORM_ADD);
+                try {
+                    GUICoordinator.getInstance().otvoriIzdavanjeNosnje(fMain, FormMode.FORM_ADD);
+                } catch (Exception ex) {
+                    Logger.getLogger(ControllerFMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 System.out.println("otvaranje forme za izdavanje nosnje");
             }
         });
@@ -73,7 +80,11 @@ public class ControllerFMain {
         fMain.addButtonPretragaOtpremnicaListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUICoordinator.getInstance().otvoriPretraguOtpremnica(fMain);
+                try {
+                    GUICoordinator.getInstance().otvoriPretraguOtpremnica(fMain);
+                } catch (Exception ex) {
+                    Logger.getLogger(ControllerFMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         

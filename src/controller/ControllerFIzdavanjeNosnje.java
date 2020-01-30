@@ -118,10 +118,17 @@ class ControllerFIzdavanjeNosnje {
         fIzdavanjeNosnje.getJtxtdatumkreiranja().setText(dat);
     }
 
-    private void fillPrimalac() throws Exception {
+    private void fillPrimalac() {
         fIzdavanjeNosnje.getJcmbPrimalac().removeAllItems();
 
-        List<Clan> lista = GUICoordinator.getInstance().vratiSveClanove();
+        List<Clan> lista = null;
+        try {
+            lista = GUICoordinator.getInstance().vratiSveClanove();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+            System.exit(0);
+            //Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         for (Clan clan : lista) {
             fIzdavanjeNosnje.getJcmbPrimalac().addItem(clan);
@@ -216,7 +223,8 @@ class ControllerFIzdavanjeNosnje {
                 Otpremnica o = ((StavkeOtpremniceTableModel) fIzdavanjeNosnje.getJtblotpremnica().getModel()).getOtpremnica();
                 Clan clanPrimalac = (Clan) fIzdavanjeNosnje.getJcmbPrimalac().getSelectedItem();
                 o.setClan(clanPrimalac);
-
+                o.setDatumKreiranja(new Date());
+                
                 IzmeneOtpremnice1TableModel izm = (IzmeneOtpremnice1TableModel) fIzdavanjeNosnje.getjTblIzmene().getModel();
                 Otpremnica otp = izm.getOtpremnica();
                 for (IzmeneOtpremnice izmena : otp.getIzmenaOtpremnice()) {
@@ -231,7 +239,9 @@ class ControllerFIzdavanjeNosnje {
                 try {
                     o = sacuvajOtpremnicu(o);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Otpremnica sa sifrom: " + o.getSifraOtpremnice() + " je sacuvana!");
                 postaviOtpremnicu(o);
@@ -259,13 +269,26 @@ class ControllerFIzdavanjeNosnje {
 
                 o.setIzmenaOtpremnice(otp.getIzmenaOtpremnice());
                 o.setClan(clanPrimalac);
+
+                if (o.getStavkaOtpremnice().isEmpty()) {
+                    o.setAktivna(false);
+                } else {
+                    o.setAktivna(true);
+                }
+
                 try {
                     o = izmeniOtpremnicu(o);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Otpremnica sa sifrom: " + o.getSifraOtpremnice() + " je izmenjena!");
 
+                /*if(o.getStavkaOtpremnice().size() == 1 && o.getStavkaOtpremnice().get(0).getRedniBroj() == 0){
+                    o.getStavkaOtpremnice().remove(0);
+                }*/
+                
                 postaviOtpremnicu(o);
 
                 prepareFormMode(FormMode.FORM_VIEW);
@@ -280,7 +303,9 @@ class ControllerFIzdavanjeNosnje {
                 try {
                     obrisiOtpremnicu(otpremnica);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFIzdavanjeNosnje.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fIzdavanjeNosnje, "Obrisana je otpremnica sa sifrom: " + otpremnica.getSifraOtpremnice());
                 prepareFormMode(FormMode.FORM_ADD);

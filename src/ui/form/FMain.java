@@ -7,6 +7,7 @@ package ui.form;
 
 import domain.enumeracije.FormMode;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -227,6 +228,14 @@ public class FMain extends javax.swing.JFrame {
     
     public void addButtonPretragaOtpremnicaListener(ActionListener ae){
         jMenuItemPretragaOtpremnice.addActionListener(ae);
+    }
+
+    public void ugasi() {
+        JOptionPane.showMessageDialog(this, "Server se gasi!", "Obavestenje", JOptionPane.INFORMATION_MESSAGE);
+        if (this != null) {
+            this.ugasi();
+        }
+        dispose();
     }
     
 }

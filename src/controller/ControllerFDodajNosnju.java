@@ -164,7 +164,9 @@ public class ControllerFDodajNosnju {
                 try {
                     n = sacuvajNosnju(n);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fDodajNosnju, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 JOptionPane.showMessageDialog(fDodajNosnju, "Uspesno uneta nosnja!");
@@ -182,7 +184,11 @@ public class ControllerFDodajNosnju {
                 try {
                     obrisiNosnju(n);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
+                    /*JOptionPane.showMessageDialog(fDodajNosnju, "Nosnja ne moze biti obrisana zato sto je izdata!");
+                    return;*/
+                    JOptionPane.showMessageDialog(fDodajNosnju, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
                 }
                 JOptionPane.showMessageDialog(fDodajNosnju, "Obrisana je nosnja sa sifrom: " + n.getSifraNosnje());
 
@@ -220,7 +226,9 @@ public class ControllerFDodajNosnju {
                 try {
                     n = izmeniNosnju(n);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fDodajNosnju, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFDodajNosnju.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fDodajNosnju, "Izmenjena je nosnja sa sifrom: " + n.getSifraNosnje());
 
@@ -271,6 +279,7 @@ public class ControllerFDodajNosnju {
             fDodajNosnju.getjBtnCancel().setEnabled(true);
             fDodajNosnju.getjBtnUbaciNovog().setEnabled(false);
             fDodajNosnju.getjComboBoxVrstaNosnje().setSelectedItem(VrstaNosnje.Izaberite_vrstu_nosnje);
+            fDodajNosnju.getjComboBoxVrstaNosnje().setEnabled(true);
 
         } else if (formModeVrstaNosnje.equals(FormModeVrstaNosnje.FORM_NOSNJA)) {
             fDodajNosnju.getjTxtSifraNosnje().setEnabled(false);

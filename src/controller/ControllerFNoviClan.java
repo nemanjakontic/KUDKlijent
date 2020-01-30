@@ -135,7 +135,9 @@ public class ControllerFNoviClan {
                 try {
                     clan = zapamtiClana(clan);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fNoviClan, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 JOptionPane.showMessageDialog(fNoviClan, "Clan je sacuvan sa brojem clanske karte: " + clan.getBrojCK());
@@ -159,7 +161,9 @@ public class ControllerFNoviClan {
                 try {
                     obrisiClana(clan);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fNoviClan, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fNoviClan, "Obrisan je clan sa brojem CK: " + clan.getBrojCK());
                 prepareForm(FormMode.FORM_ADD);
@@ -170,7 +174,6 @@ public class ControllerFNoviClan {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fNoviClan.dispose();
-
             }
         });
 
@@ -223,7 +226,9 @@ public class ControllerFNoviClan {
                 try {
                     clan = izmeniClana(clan);
                 } catch (Exception ex) {
-                    Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(fNoviClan, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                    System.exit(0);
+                    //Logger.getLogger(ControllerFNoviClan.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 JOptionPane.showMessageDialog(fNoviClan, "Izmenjen je clan sa brojem CK: " + clan.getBrojCK());
                 postaviClana(clan);

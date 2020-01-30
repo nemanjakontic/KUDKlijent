@@ -50,7 +50,9 @@ public class ControllerFPretragaNosnje {
         try {
             lista = vratiListuNosnje();
         } catch (Exception ex) {
-            Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(fPretragaNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+            System.exit(0);
+            //Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         fPretragaNosnje.getjTblNosnja().setModel(new NosnjaTableModel(lista));
@@ -71,7 +73,7 @@ public class ControllerFPretragaNosnje {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    public List<Nosnja> vratiNosnjePoKriterijumu(Nosnja nosnja) throws Exception{
+    public List<Nosnja> vratiNosnjePoKriterijumu(Nosnja nosnja) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_NOSNJE_PO_KRITERIJUMU);
         /*Map<String, String> nosnjaMap = new HashMap<>();
@@ -90,7 +92,7 @@ public class ControllerFPretragaNosnje {
         }
         throw new Exception(responseObject.getErrorMessage());
     }
-    
+
     public List<Nosnja> vratiListuNosnje() throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_SVЕ_NOSNJE);
@@ -117,12 +119,14 @@ public class ControllerFPretragaNosnje {
                     Long sifraNosnje = (Long) fPretragaNosnje.getjTblNosnja().getValueAt(selectedRow, 0);
                     Nosnja nosnjica = new Nosnja();
                     nosnjica.setSifraNosnje(sifraNosnje);
-                    
+
                     Nosnja nosnja = null;
                     try {
                         nosnja = vratiNosnju(nosnjica);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     GUICoordinator.getInstance().inicijalizujKonstruktorKontroleraNovaNosnja();
@@ -157,7 +161,9 @@ public class ControllerFPretragaNosnje {
                     try {
                         lista = vratiListuNosnje();
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     ctm.azuriraj(lista);
@@ -165,22 +171,24 @@ public class ControllerFPretragaNosnje {
                     String kriterijumPretrage = fPretragaNosnje.getjTxtPretraga1().getText();
                     String naziv = fPretragaNosnje.getJtxtNaziv().getText();
                     String vrsta = String.valueOf(fPretragaNosnje.getJcmbVrsta().getSelectedItem());
-                    
+
                     Nosnja nosnja = new Nosnja();
-                    if(!kriterijumPretrage.equals("")){
+                    if (!kriterijumPretrage.equals("")) {
                         Long sifra = Long.parseLong(kriterijumPretrage);
                         nosnja.setSifraNosnje(sifra);
                     }
                     nosnja.setNazivNosnje(naziv);
                     nosnja.setVrstaNosnje(VrstaNosnje.valueOf(vrsta));
-                    
+
                     List<Nosnja> nosnje = null;
                     try {
                         nosnje = vratiNosnjePoKriterijumu(nosnja);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaNosnje, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaNosnje.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     NosnjaTableModel ctm = new NosnjaTableModel(nosnje);
                     fPretragaNosnje.getjTblNosnja().setModel(ctm);
                 }
@@ -191,7 +199,7 @@ public class ControllerFPretragaNosnje {
 
     private void fillVrsteNosnje() {
         fPretragaNosnje.getJcmbVrsta().removeAllItems();
-        
+
         fPretragaNosnje.getJcmbVrsta().addItem(VrstaNosnje.Izaberite_vrstu_nosnje);
         fPretragaNosnje.getJcmbVrsta().addItem(VrstaNosnje.BELINA);
         fPretragaNosnje.getJcmbVrsta().addItem(VrstaNosnje.NOSNJA);

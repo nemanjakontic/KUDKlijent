@@ -59,7 +59,7 @@ public class ControllerFPretragaOtpremnica {
         throw new Exception(responseObject.getErrorMessage());
     }
 
-    private List<Otpremnica> vratiOtpremnicePoKriterijumu(Otpremnica otpremnica) throws Exception{
+    private List<Otpremnica> vratiOtpremnicePoKriterijumu(Otpremnica otpremnica) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_OTPREMNICE_PO_KRITERIJUMU);
         /*Map<String, String> otpremnicaMap = new HashMap<>();
@@ -77,7 +77,7 @@ public class ControllerFPretragaOtpremnica {
         }
         throw new Exception(responseObject.getErrorMessage());
     }
-    
+
     private Otpremnica vratiOtpremnicu(Otpremnica otpremnica) throws Exception {
         RequestObject requestObject = new RequestObject();
         requestObject.setOperation(Operation.VRATI_JEDNU_OTPREMNICE);
@@ -94,7 +94,15 @@ public class ControllerFPretragaOtpremnica {
     }
 
     private void fillTabela() throws Exception {
-        List<Otpremnica> lista = vratiSveOtpremnice();
+        List<Otpremnica> lista = null;
+
+        try {
+            lista = vratiSveOtpremnice();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(fPretragaOtpremnica, "Dogodila se greska u komunikaciji!(server je ugasen)");
+            System.exit(0);
+            //Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         fPretragaOtpremnica.getjTable1().setModel(new OtpremniceTableModel(lista));
     }
@@ -114,7 +122,9 @@ public class ControllerFPretragaOtpremnica {
                     try {
                         otpremnica = vratiOtpremnicu(otp);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaOtpremnica, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     GUICoordinator.getInstance().pozoviPostavljanjeOtpremnice(otpremnica);
                     try {
@@ -128,7 +138,9 @@ public class ControllerFPretragaOtpremnica {
                     try {
                         lista = vratiSveOtpremnice();
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaOtpremnica, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     otm.azuriraj(lista);
                 }
@@ -144,7 +156,9 @@ public class ControllerFPretragaOtpremnica {
                     try {
                         lista = vratiSveOtpremnice();
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaOtpremnica, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     otm.azuriraj(lista);
@@ -153,28 +167,30 @@ public class ControllerFPretragaOtpremnica {
                     String clan = String.valueOf(fPretragaOtpremnica.getJcmbClan().getSelectedItem());
                     //
                     Clan clan1 = null;
-                    if(!clan.equals("Izaberite clana")){
-                         clan1 = (Clan) fPretragaOtpremnica.getJcmbClan().getSelectedItem();
+                    if (!clan.equals("Izaberite clana")) {
+                        clan1 = (Clan) fPretragaOtpremnica.getJcmbClan().getSelectedItem();
                     }
-                    
+
                     Otpremnica otpremnica = new Otpremnica();
-                    
-                    if(!sifra.equals("")){
+
+                    if (!sifra.equals("")) {
                         Long sifra1 = Long.parseLong(sifra);
                         otpremnica.setSifraOtpremnice(sifra1);
                     }
                     //mozda da ide provera da li je equals Izaberite clana
-                    if(clan != null){
+                    if (clan != null) {
                         otpremnica.setClan(clan1);
                     }
-                    
+
                     List<Otpremnica> listaOtp = null;
                     try {
                         listaOtp = vratiOtpremnicePoKriterijumu(otpremnica);
                     } catch (Exception ex) {
-                        Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(fPretragaOtpremnica, "Dogodila se greska u komunikaciji!(server je ugasen)");
+                        System.exit(0);
+                        //Logger.getLogger(ControllerFPretragaOtpremnica.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     OtpremniceTableModel otm = new OtpremniceTableModel(listaOtp);
                     fPretragaOtpremnica.getjTable1().setModel(otm);
                 }

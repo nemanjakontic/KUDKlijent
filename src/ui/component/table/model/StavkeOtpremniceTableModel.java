@@ -5,7 +5,6 @@
  */
 package ui.component.table.model;
 
-
 import domain.Nosnja;
 
 import domain.Otpremnica;
@@ -16,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Nemanja
  */
-public class StavkeOtpremniceTableModel extends AbstractTableModel{
+public class StavkeOtpremniceTableModel extends AbstractTableModel {
 
     private Otpremnica otpremnica;
     private String[] nazivi = new String[]{"Redni broj", "Naziv nosnje", "Vrsta nosnje", "Kolicina", "Sifra nosnje"};
@@ -24,12 +23,10 @@ public class StavkeOtpremniceTableModel extends AbstractTableModel{
     public StavkeOtpremniceTableModel(Otpremnica otpremnica) {
         this.otpremnica = otpremnica;
     }
-    
-    
-    
+
     @Override
     public int getRowCount() {
-        if(otpremnica != null){
+        if (otpremnica != null) {
             return otpremnica.getStavkaOtpremnice().size();
         }
         return 0;
@@ -43,15 +40,29 @@ public class StavkeOtpremniceTableModel extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         StavkaOtpremnice o = otpremnica.getStavkaOtpremnice().get(rowIndex);
-        switch(columnIndex){
-            case 0: return o.getRedniBroj();
-            case 1: return o.getNosnja().getNazivNosnje();
-            case 2: return o.getNosnja().getVrstaNosnje();
-            case 3: return o.getKolicina();
-            case 4: return o.getNosnja().getSifraNosnje();
-            default: return "n/a";
-            }
+        switch (columnIndex) {
+            case 0:
+                return o.getRedniBroj();
+            case 1:
+                if (o.getNosnja() != null) {
+                    return o.getNosnja().getNazivNosnje();
+                }
+                return "";
+            case 2:
+                if (o.getNosnja() != null) {
+                    return o.getNosnja().getVrstaNosnje();
+                }
+                return "";
+            case 3:
+                return o.getKolicina();
+            case 4:
+                if (o.getNosnja() != null) {
+                    return o.getNosnja().getSifraNosnje();
+                }
+            default:
+                return "n/a";
         }
+    }
 
     @Override
     public String getColumnName(int column) {
@@ -70,7 +81,7 @@ public class StavkeOtpremniceTableModel extends AbstractTableModel{
         otpremnica.getStavkaOtpremnice().add(stavka);
         fireTableDataChanged();
     }
-    
+
     private void setRedneBrojeve() {
         int redniBroj = 0;
         for (StavkaOtpremnice stavka : otpremnica.getStavkaOtpremnice()) {
@@ -84,8 +95,4 @@ public class StavkeOtpremniceTableModel extends AbstractTableModel{
         fireTableDataChanged();
     }
 
-    
-    
 }
-    
-

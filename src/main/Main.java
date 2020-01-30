@@ -18,6 +18,8 @@ public class Main {
         
         GUICoordinator coordinator = new GUICoordinator();
         coordinator.otvoriLoginFormu();
-       
+        
+        
+        
     }
 }

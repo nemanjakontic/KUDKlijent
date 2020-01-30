@@ -6,6 +6,7 @@
 package ui.form;
 
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -316,6 +317,18 @@ public class FLogin extends javax.swing.JFrame {
 
     public void setjTxtUsername(javax.swing.JTextField jTxtUsername) {
         this.jTxtUsername = jTxtUsername;
+    }
+
+    /*public void ugasi() {
+        JOptionPane.showMessageDialog(this, "Server se gasi!", "Obavestenje", JOptionPane.INFORMATION_MESSAGE);
+        if (frm != null) {
+            frm.ugasi();
+        }
+        dispose();
+    }*/
+
+    public void ugasi() {
+        JOptionPane.showMessageDialog(this, "Server se gasi!", "Obavestenje", JOptionPane.INFORMATION_MESSAGE);
     }
     
     
